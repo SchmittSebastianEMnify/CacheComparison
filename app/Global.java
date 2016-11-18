@@ -1,6 +1,7 @@
 import implementations.CacheImplBasics;
 import implementations.CacheImplWithLoader;
 import implementations.CacheImplWithoutLoader;
+import implementations.EhCacheImpl;
 import implementations.PlayCacheImpl;
 
 import java.util.ArrayList;
@@ -53,6 +54,8 @@ public class Global extends GlobalSettings
     
     checkCache(PlayCacheImpl.class);
     
+    checkCache(EhCacheImpl.class);
+    
     } catch (InterruptedException | ExecutionException e) {
       Logger.error(e.getMessage());
       e.printStackTrace();
@@ -63,12 +66,12 @@ public class Global extends GlobalSettings
     
   }
   
-  private play.cache.Cache getCache(@NamedCache("permission-cache") play.cache.Cache cache) {
-    return cache;
-  }
-  private play.cache.Cache getUserCache(@NamedCache("user-cache") play.cache.Cache cache) {
-    return cache;
-  }
+//  private play.cache.Cache getCache(@NamedCache("permission-cache") play.cache.Cache cache) {
+//    return cache;
+//  }
+//  private play.cache.Cache getUserCache(@NamedCache("user-cache") play.cache.Cache cache) {
+//    return cache;
+//  }
   
   private static void prepareData() {
     System.out.println("prepare data");
