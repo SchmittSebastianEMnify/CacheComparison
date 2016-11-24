@@ -3,7 +3,8 @@ package caches;
 import implementations.CacheImplBasics;
 import implementations.CacheImplWithLoader;
 import implementations.CacheImplWithoutLoader;
-
+import implementations.EhCacheImpl;
+import implementations.PlayCacheImpl;
 import abstracts.AbstractCache;
 
 import java.util.Map;
@@ -23,6 +24,10 @@ public class Cache {
       cache = new CacheImplWithoutLoader(inputData, updateData);
     } else if (className.equals(CacheImplBasics.class.getName())) {
       cache = new CacheImplBasics(inputData, updateData);
+    } else if (className.equals(PlayCacheImpl.class.getName())) {
+      cache = new PlayCacheImpl(inputData, updateData);
+    } else if (className.equals(EhCacheImpl.class.getName())) {
+      cache = new EhCacheImpl(inputData, updateData);
     }
   }
 

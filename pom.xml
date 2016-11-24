@@ -3,35 +3,86 @@
   <groupId>GuavaCacheTest</groupId>
   <artifactId>GuavaCacheTest</artifactId>
   <version>0.0.1-SNAPSHOT</version>
-  <build>
-    <sourceDirectory>src</sourceDirectory>
+  <properties>
+    
+    <play2.version>2.4.0-M1</play2.version>
+    <play2.plugin.version>1.0.0-alpha8</play2.plugin.version>
+    <sbt-compiler.plugin.version>1.0.0-beta4</sbt-compiler.plugin.version>
+   </properties>
+ <build>
+    <sourceDirectory>${basedir}/app</sourceDirectory>
+    <testSourceDirectory>${basedir}/test</testSourceDirectory>
+    <resources>
+      <resource>
+        <directory>${basedir}/conf</directory>
+      </resource>
+      <resource>
+        <directory>${basedir}/app/assets</directory>
+      </resource>
+      <resource>
+        <directory>${basedir}</directory>
+        <includes>
+          <include>public/**</include>
+        </includes>
+      </resource>
+    </resources>
+
     <plugins>
-      <plugin>
+    <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.1</version>
         <configuration>
           <source>1.8</source>
           <target>1.8</target>
         </configuration>
       </plugin>
       <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>exec-maven-plugin</artifactId>
-        <version>1.2.1</version>
+        <groupId>com.google.code.play2-maven-plugin</groupId>
+        <artifactId>play2-maven-plugin</artifactId>
+        <version>${play2.plugin.version}</version>
+        <extensions>true</extensions>
+        <configuration>
+          <mainLang>java</mainLang>
+        </configuration>
         <executions>
           <execution>
+            <id>dist</id>
+            <phase>package</phase>
             <goals>
-              <goal>java</goal>
+              <goal>dist</goal>
             </goals>
+            <configuration>
+              <configFile>${basedir}/conf/application.conf</configFile>
+            </configuration>
           </execution>
         </executions>
+      </plugin>
+
+      <plugin>
+        <groupId>com.google.code.sbt-compiler-maven-plugin</groupId>
+        <artifactId>sbt-compiler-maven-plugin</artifactId>
+        <version>${sbt-compiler.plugin.version}</version>
         <configuration>
-          <mainClass>main.GuavaCacheTestApp</mainClass>
-          <arguments>
-            <argument>foo</argument>
-            <argument>bar</argument>
-          </arguments>
+          <source>1.8</source>
+          <target>1.8</target>
         </configuration>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <configuration>
+          <archive>
+            <manifest>
+              <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+              <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
+            </manifest>
+          </archive>
+        </configuration>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
       </plugin>
     </plugins>
   </build>
@@ -41,5 +92,31 @@
       <artifactId>guava</artifactId>
       <version>20.0</version>
     </dependency>
+    <dependency>
+      <groupId>com.typesafe.play</groupId>
+      <artifactId>play-java_2.11</artifactId>
+      <version>${play2.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.typesafe.play</groupId>
+      <artifactId>play-cache_2.11</artifactId>
+      <version>${play2.version}</version>
+    </dependency>
+      <dependency>
+      <groupId>com.typesafe.play</groupId>
+      <artifactId>play-netty-server_2.11</artifactId>
+      <version>${play2.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.typesafe.akka</groupId>
+      <artifactId>akka-actor_2.11</artifactId>
+      <version>2.4.12</version>
+    </dependency>
+    <dependency>
+      <groupId>net.sf.ehcache</groupId>
+      <artifactId>ehcache</artifactId>
+      <version>2.10.3</version>
+	</dependency>
   </dependencies>
+  
 </project>
