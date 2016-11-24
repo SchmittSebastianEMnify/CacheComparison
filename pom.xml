@@ -117,6 +117,11 @@
       <artifactId>ehcache</artifactId>
       <version>2.10.3</version>
 	</dependency>
+    <dependency>
+      <groupId>com.typesafe.netty</groupId>
+      <artifactId>netty-http-pipelining</artifactId>
+    <version>1.1.4</version>
+</dependency>
   </dependencies>
   
 </project>
