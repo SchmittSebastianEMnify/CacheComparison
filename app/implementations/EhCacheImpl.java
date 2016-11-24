@@ -1,5 +1,12 @@
 package implementations;
 
+import com.google.common.util.concurrent.ListenableFutureTask;
+
+import abstracts.AbstractCache;
+import net.sf.ehcache.Cache;
+import net.sf.ehcache.CacheManager;
+import net.sf.ehcache.Element;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
@@ -9,13 +16,6 @@ import java.util.TimerTask;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
-
-import net.sf.ehcache.Cache;
-import net.sf.ehcache.CacheManager;
-import net.sf.ehcache.Element;
-import abstracts.AbstractCache;
-
-import com.google.common.util.concurrent.ListenableFutureTask;
 
 
 public class EhCacheImpl extends AbstractCache {
@@ -44,7 +44,7 @@ public class EhCacheImpl extends AbstractCache {
           long before = System.currentTimeMillis();
           loadMaptoCache(task.get(2500, TimeUnit.MILLISECONDS));
           if (update) {
-            System.err.println("update: " + (System.currentTimeMillis() - before));
+            System.err.println("update: " + (System.currentTimeMillis() - before) + " ms");
           } else {
             update = true;
             latch.countDown();
@@ -65,6 +65,7 @@ public class EhCacheImpl extends AbstractCache {
     cache.putAll(coll);
   }
 
+  @SuppressWarnings("unchecked")
   @Override
   public boolean hasValueForKey(String key, Long value) {
     Element element = cache.get(key);

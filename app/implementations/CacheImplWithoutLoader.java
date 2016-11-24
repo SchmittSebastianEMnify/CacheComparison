@@ -40,7 +40,7 @@ public class CacheImplWithoutLoader extends AbstractCache {
           long before = System.currentTimeMillis();
           cache.putAll(task.get(2500, TimeUnit.MILLISECONDS));
           if (update) {
-            System.err.println("update: " + (System.currentTimeMillis() - before));
+            System.err.println("update: " + (System.currentTimeMillis() - before) + " ms");
           } else {
             update = true;
             latch.countDown();

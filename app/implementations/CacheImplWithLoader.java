@@ -63,7 +63,7 @@ public class CacheImplWithLoader extends AbstractCache {
         try {
           long before = System.currentTimeMillis();
           cache.putAll(task.get(2500, TimeUnit.MILLISECONDS));
-          System.err.println("update: " + (System.currentTimeMillis() - before));
+          System.err.println("update: " + (System.currentTimeMillis() - before) + " ms");
         } catch (Exception e) {
           System.err.println("failed to load data");
         }

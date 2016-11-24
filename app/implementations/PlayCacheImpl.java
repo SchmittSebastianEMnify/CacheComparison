@@ -1,5 +1,10 @@
 package implementations;
 
+import com.google.common.util.concurrent.ListenableFutureTask;
+
+import abstracts.AbstractCache;
+import play.cache.Cache;
+
 import java.util.Map;
 import java.util.Set;
 import java.util.Timer;
@@ -7,16 +12,6 @@ import java.util.TimerTask;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
-
-import javax.inject.Inject;
-
-import play.cache.Cache;
-import play.cache.CacheApi;
-import play.cache.Cache;
-import play.cache.NamedCache;
-import abstracts.AbstractCache;
-
-import com.google.common.util.concurrent.ListenableFutureTask;
 
 public class PlayCacheImpl extends AbstractCache {
   private Timer timer;
@@ -44,7 +39,7 @@ public class PlayCacheImpl extends AbstractCache {
           long before = System.currentTimeMillis();
           loadAll(task.get(2500, TimeUnit.MILLISECONDS));
           if (update) {
-            System.err.println("update: " + (System.currentTimeMillis() - before));
+            System.err.println("update: " + (System.currentTimeMillis() - before) + " ms");
           } else {
             update = true;
             latch.countDown();
@@ -63,6 +58,7 @@ public class PlayCacheImpl extends AbstractCache {
     
   }
 
+  @SuppressWarnings("static-access")
   private void loadAll(Map<String,Set<Long>> data) {
     try {
     data.forEach((key,value) -> cache.set(key, value));
@@ -71,8 +67,10 @@ public class PlayCacheImpl extends AbstractCache {
     }
   }
 
+  @SuppressWarnings("static-access")
   @Override
   public boolean hasValueForKey(String key, Long value) {
+    @SuppressWarnings("unchecked")
     Set<Long> values = (Set<Long>) cache.get(key);
     
     if (values==null) return false;
