@@ -54,9 +54,7 @@ public class Global extends GlobalSettings
       e.printStackTrace();
     }
   
-    
-   
-    
+    System.exit(-1);
   }
   
 //  private play.cache.Cache getCache(@NamedCache("permission-cache") play.cache.Cache cache) {
@@ -93,7 +91,8 @@ public class Global extends GlobalSettings
 
   private static void checkCache(Class<?> clazz) throws ExecutionException, InterruptedException {
     System.out.println();
-    System.out.println("----" + clazz.getSimpleName() + "----");
+    System.out.println("---------" + clazz.getSimpleName() + "---------");
+    System.out.println();
 
     long before = System.currentTimeMillis();
     Cache.create(clazz.getName(), inputData, updateData);
