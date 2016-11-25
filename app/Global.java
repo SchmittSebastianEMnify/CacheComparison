@@ -1,8 +1,12 @@
+import caches.Cache;
 import implementations.CacheImplBasics;
 import implementations.CacheImplWithLoader;
 import implementations.CacheImplWithoutLoader;
 import implementations.EhCacheImpl;
 import implementations.PlayCacheImpl;
+import play.Application;
+import play.GlobalSettings;
+import play.Logger;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -13,15 +17,6 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutionException;
-
-import play.Application;
-import play.GlobalSettings;
-import play.Logger;
-import play.cache.NamedCache;
-import play.libs.Akka;
-import caches.Cache;
-
-import com.typesafe.config.Config;
 
 /**
  * Hello world!
@@ -39,8 +34,6 @@ public class Global extends GlobalSettings
   
   @Override
   public void onStart(Application app) {
-    
-    Config config = Akka.system().settings().config();
        
     System.out.println( "Hello World!" );
     
@@ -61,9 +54,7 @@ public class Global extends GlobalSettings
       e.printStackTrace();
     }
   
-    
-   
-    
+    System.exit(-1);
   }
   
 //  private play.cache.Cache getCache(@NamedCache("permission-cache") play.cache.Cache cache) {
@@ -99,30 +90,35 @@ public class Global extends GlobalSettings
   }
 
   private static void checkCache(Class<?> clazz) throws ExecutionException, InterruptedException {
-    System.out.println("----" + clazz.getSimpleName() + "----");
+    System.out.println();
+    System.out.println("---------" + clazz.getSimpleName() + "---------");
+    System.out.println();
 
     long before = System.currentTimeMillis();
     Cache.create(clazz.getName(), inputData, updateData);
-    System.out.println("Creation: " + (System.currentTimeMillis() - before));
+    System.out.println("Creation: " + (System.currentTimeMillis() - before) + " ms");
 
+    System.out.println();
     System.out.println("Lookup");
     before = System.currentTimeMillis();
     checkValues();
-    System.out.println("Lookup: " + (System.currentTimeMillis() - before));
+    System.out.println("Lookup: " + (System.currentTimeMillis() - before) + " ms");
 
     Thread.sleep(3500);
 
+    System.out.println();
     System.out.println("Lookup while refreshing");
     before = System.currentTimeMillis();
     checkValues();
-    System.out.println("Lookup while refreshing: " + (System.currentTimeMillis() - before));
+    System.out.println("Lookup while refreshing: " + (System.currentTimeMillis() - before) + " ms");
 
     Thread.sleep(2000);
 
+    System.out.println();
     System.out.println("Lookup after refreshed");
     before = System.currentTimeMillis();
     checkValues();
-    System.out.println("Lookup after refreshed: " + (System.currentTimeMillis() - before));
+    System.out.println("Lookup after refreshed: " + (System.currentTimeMillis() - before) + " ms");
 
     Thread.sleep(5000);
 
@@ -140,10 +136,11 @@ public class Global extends GlobalSettings
   }
 
   private static void checkValues() throws ExecutionException {
-    System.out.println(Cache.hasValueForKey("key1", 1L));
-    System.out.println(Cache.hasValueForKey("key2", 1L));
-    System.out.println(Cache.hasValueForKey("key2", 2L));
-    System.out.println(Cache.hasValueForKey("key" + KEY_COUNT, UPDATE_VALUE_COUNT));
+    System.out.println("Has Key1 Value 1:\t\t" + Cache.hasValueForKey("key1", 1L));
+    System.out.println("Has Key2 Value 1:\t\t" + Cache.hasValueForKey("key2", 1L));
+    System.out.println("Has Key2 Value 2:\t\t" + Cache.hasValueForKey("key2", 2L));
+    System.out.println("Has Key" + KEY_COUNT + " Value " + UPDATE_VALUE_COUNT + ":\t"
+        + Cache.hasValueForKey("key" + KEY_COUNT, UPDATE_VALUE_COUNT));
   }
 
   private static void checkValuesSilent() throws ExecutionException {
@@ -155,6 +152,7 @@ public class Global extends GlobalSettings
   }
 
   private static void checkConcurrent() throws InterruptedException {
+    System.out.println();
     System.out.println("Concurrent Lookup - Thread-Count: " + CHECK_CONCURRENT_COUNT);
     CountDownLatch latch = new CountDownLatch(CHECK_CONCURRENT_COUNT);
     CountDownLatch startLatch = new CountDownLatch(CHECK_CONCURRENT_COUNT);
@@ -185,7 +183,7 @@ public class Global extends GlobalSettings
     startLatch.await();
     long before = System.currentTimeMillis();
     latch.await();
-    System.out.println("Concurrent Lookup: " + (System.currentTimeMillis() - before));
+    System.out.println("Concurrent Lookup: " + (System.currentTimeMillis() - before) + " ms");
   }
   
   

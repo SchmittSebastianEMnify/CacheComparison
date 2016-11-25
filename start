@@ -1,0 +1,7 @@
+#!/usr/bin/env sh
+
+mvn clean install;
+cd target/;
+unzip GuavaCacheTest-0.0.1-SNAPSHOT-dist.zip;
+sh GuavaCacheTest-0.0.1-SNAPSHOT/start;
+cd ..
